@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.apache.inlong.manager.dao.mapper.StreamSourceMapper">
+    <resultMap id="BaseResultMap" type="org.apache.inlong.manager.dao.entity.StreamSource">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="task_type" jdbcType="INTEGER" property="taskType"/>
+        <result column="inlong_group_id" jdbcType="VARCHAR" property="inlongGroupId"/>
+        <result column="inlong_stream_id" jdbcType="VARCHAR" property="inlongStreamId"/>
+        <result column="server_name" jdbcType="VARCHAR" property="serverName"/>
+        <result column="is_hybrid_source" jdbcType="INTEGER" property="isHybridSource"/>
+        <result column="is_table_mapping" jdbcType="INTEGER" property="isTableMapping"/>
+        <result column="date_offset" jdbcType="INTEGER" property="dateOffset"/>
+        <result column="date_offset_unit" jdbcType="VARCHAR" property="dateOffsetUnit"/>
+        <result column="task_config" jdbcType="VARCHAR" property="taskConfig"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="previous_status" jdbcType="INTEGER" property="previousStatus"/>
+        <result column="is_deleted" jdbcType="INTEGER" property="isDeleted"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="temp_view" jdbcType="LONGVARCHAR" property="tempView"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+        id, task_type, inlong_group_id, inlong_stream_id, server_name, is_hybrid_source, is_table_mapping,
+        date_offset, date_offset_unit, task_config, status, previous_status,
+        is_deleted, creator, modifier, create_time, modify_time, temp_view
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from stream_source
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+<!--    <select id="selectAgentTaskByIp" resultMap="FileAgentTask">-->
+<!--        select detail.inlong_group_id,-->
+<!--               detail.inlong_stream_id,-->
+<!--               detail.ip,-->
+<!--               detail.file_path,-->
+<!--               detail.status,-->
+<!--               detail.status mod 100                             as op,-->
+<!--               detail.modify_time,-->
+<!--               detail.id,-->
+<!--               concat(basic.date_offset, basic.date_offset_unit) as timeOffset,-->
+<!--               biz.middleware_type,-->
+<!--               biz.mq_resource_obj,-->
+<!--               ds.data_generate_rule,-->
+<!--               ds.sort_type,-->
+<!--               stream.data_separator-->
+<!--        from source_file_basic basic,-->
+<!--             source_file_detail detail,-->
+<!--             business biz,-->
+<!--             data_schema ds,-->
+<!--             data_stream stream-->
+<!--        where detail.ip = #{ip,jdbcType=VARCHAR}-->
+<!--          and detail.is_deleted = 0-->
+<!--          and (floor(detail.STATUS / 100) = 2)-->
+<!--          and basic.inlong_group_id = detail.inlong_group_id-->
+<!--          and basic.inlong_stream_id = detail.inlong_stream_id-->
+<!--          and biz.inlong_group_id = detail.inlong_group_id-->
+<!--          and biz.schema_name = ds.name-->
+<!--          and stream.inlong_stream_id = detail.inlong_stream_id-->
+<!--          and stream.inlong_group_id = detail.inlong_group_id-->
+<!--    </select>-->
+</mapper>

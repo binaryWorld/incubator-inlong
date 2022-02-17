@@ -1003,6 +1003,32 @@ CREATE TABLE `flume_sink`
 );
 
 -- ----------------------------
+-- Table structure for stream_source
+-- ----------------------------
+DROP TABLE IF EXISTS `stream_source`;
+CREATE TABLE `stream_source` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Incremental primary key',
+  `task_type` tinyint(1) NOT NUL COMMENT '1: SQL, 2: BINLOG, 3: FILE, 4: KAFKA',
+  `inlong_group_id` varchar(128) NOT NULL COMMENT 'Owning business group id',
+  `inlong_stream_id` varchar(128) NOT NULL COMMENT 'Owning data stream id',
+  `server_name` varchar(64) DEFAULT NULL COMMENT 'The name of the data source service. If it is empty, add configuration through the following fields',
+  `is_hybrid_source` tinyint(1) DEFAULT '0' COMMENT 'Whether to mix data sources',
+  `is_table_mapping` tinyint(1) DEFAULT '0' COMMENT 'Is there a table name mapping',
+  `date_offset` int(4) DEFAULT '0' COMMENT 'Time offset\n',
+  `date_offset_unit` varchar(2) DEFAULT 'H' COMMENT 'Time offset unit',
+  `task_config` mediumtext DEFAULT NULL COMMENT 'JSON String task config',
+  `status` int(4) DEFAULT '0' COMMENT 'Data source status',
+  `previous_status` int(4) DEFAULT '0' COMMENT 'Previous status',
+  `is_deleted` tinyint(1) DEFAULT '0' COMMENT 'Whether to delete, 0: not deleted, 1: deleted',
+  `creator` varchar(64) NOT NULL COMMENT 'Creator name',
+  `modifier` varchar(64) DEFAULT NULL COMMENT 'Modifier name',
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Create time',
+  `modify_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modify time',
+  `temp_view` json DEFAULT NULL COMMENT 'Temporary view, used to save un-submitted and unapproved intermediate data after modification',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COMMENT='Detailed table of file data source';
+
+-- ----------------------------
 -- Table structure for flume_sink_ext
 -- ----------------------------
 DROP TABLE IF EXISTS `flume_sink_ext`;
