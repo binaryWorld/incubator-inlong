@@ -21,23 +21,13 @@ import lombok.Data;
 
 @Data
 public class DataConfig {
-    private String additionalAttr;
     private String inlongGroupId;
-    private String dataName;
     private String inlongStreamId;
     private String deliveryTime;
-    private String fieldSplitter;
-    private String cycleUnit;
+    private String uuid;
     private String ip;
-    private String middlewareType;
-    private String mqMasterAddress;
     private String op;
-    private String scheduleTime;
     private Integer taskId;
-    private String timeOffset;
-    private String topic;
-
-    public boolean isValid() {
-        return true;
-    }
+    private Integer taskType;
+    private String taskConfig;
 }

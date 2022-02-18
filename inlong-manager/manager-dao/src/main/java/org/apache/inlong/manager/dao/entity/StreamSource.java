@@ -29,6 +29,8 @@ public class StreamSource implements Serializable {
     private Integer taskType;
     private String inlongGroupId;
     private String inlongStreamId;
+    private String agentIp;
+    private String uuid;
     private String serverName;
     private Integer isHybridSource;
     private Integer isTableMapping;

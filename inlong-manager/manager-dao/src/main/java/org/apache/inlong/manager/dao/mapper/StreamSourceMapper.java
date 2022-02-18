@@ -17,6 +17,9 @@
 
 package org.apache.inlong.manager.dao.mapper;
 
+import java.util.List;
+import org.apache.inlong.agent.plugin.fetcher.dtos.DataConfig;
+import org.apache.inlong.agent.plugin.fetcher.dtos.TaskRequestDto;
 import org.apache.inlong.manager.dao.entity.StreamSource;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +27,6 @@ import org.springframework.stereotype.Repository;
 public interface StreamSourceMapper {
 
     StreamSource selectByPrimaryKey(Integer id);
+
+    List<DataConfig> selectAgentTaskDataConfig(TaskRequestDto taskRequestDto);
 }

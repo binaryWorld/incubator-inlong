@@ -25,5 +25,6 @@ import org.apache.inlong.agent.db.CommandEntity;
 @Data
 public class TaskRequestDto {
     private String agentIp;
+    private String uuid;
     private List<CommandEntity> commandInfo = new ArrayList<>();
 }

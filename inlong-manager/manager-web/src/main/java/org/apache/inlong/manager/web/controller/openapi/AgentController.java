@@ -20,6 +20,8 @@ package org.apache.inlong.manager.web.controller.openapi;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
+import org.apache.inlong.agent.plugin.fetcher.dtos.TaskRequestDto;
+import org.apache.inlong.agent.plugin.fetcher.dtos.TaskResult;
 import org.apache.inlong.manager.common.beans.Response;
 import org.apache.inlong.manager.common.pojo.agent.AgentHeartbeatRequest;
 import org.apache.inlong.manager.common.pojo.agent.AgentStatusReportRequest;
@@ -64,6 +66,13 @@ public class AgentController {
         return Response.success(clusterInfoService.listClusterIpByType("inlong-openapi"));
     }
 
+    @PostMapping("/getTask")
+    @ApiOperation(value = "general fetch task")
+    public Response<TaskResult> getTask(@RequestBody TaskRequestDto taskRequestDto) {
+        return Response.success(agentTaskService.getAgentTask(taskRequestDto));
+    }
+
+    @Deprecated
     @PostMapping("/fileAgent/getTaskConf")
     @ApiOperation(value = "fetch file access task")
     public Response<FileAgentTaskInfo> getFileAgentTask(@RequestBody FileAgentCommandInfo info) {

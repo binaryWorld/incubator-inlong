@@ -25,6 +25,8 @@
         <result column="task_type" jdbcType="INTEGER" property="taskType"/>
         <result column="inlong_group_id" jdbcType="VARCHAR" property="inlongGroupId"/>
         <result column="inlong_stream_id" jdbcType="VARCHAR" property="inlongStreamId"/>
+        <result column="agent_ip" jdbcType="VARCHAR" property="agentIp"/>
+        <result column="uuid" jdbcType="VARCHAR" property="uuid"/>
         <result column="server_name" jdbcType="VARCHAR" property="serverName"/>
         <result column="is_hybrid_source" jdbcType="INTEGER" property="isHybridSource"/>
         <result column="is_table_mapping" jdbcType="INTEGER" property="isTableMapping"/>
@@ -41,9 +43,20 @@
         <result column="temp_view" jdbcType="LONGVARCHAR" property="tempView"/>
     </resultMap>
 
+    <resultMap id="DataConfig" type="org.apache.inlong.agent.plugin.fetcher.dtos.DataConfig">
+        <result column="inlong_group_id" jdbcType="VARCHAR" property="inlongGroupId"/>
+        <result column="inlong_stream_id" jdbcType="VARCHAR" property="inlongStreamId"/>
+        <result column="modify_time" jdbcType="VARCHAR" property="deliveryTime"/>
+        <result column="uuid" jdbcType="VARCHAR" property="uuid"/>
+        <result column="agent_ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="op" jdbcType="VARCHAR" property="op"/>
+        <result column="id" jdbcType="VARCHAR" property="taskId"/>
+        <result column="task_type" jdbcType="INTEGER" property="taskType"/>
+        <result column="task_config" jdbcType="VARCHAR" property="taskConfig"/>
+    </resultMap>
 
     <sql id="Base_Column_List">
-        id, task_type, inlong_group_id, inlong_stream_id, server_name, is_hybrid_source, is_table_mapping,
+        id, task_type, inlong_group_id, inlong_stream_id, agent_ip, uuid, server_name, is_hybrid_source, is_table_mapping,
         date_offset, date_offset_unit, task_config, status, previous_status,
         is_deleted, creator, modifier, create_time, modify_time, temp_view
     </sql>
@@ -55,34 +68,25 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-<!--    <select id="selectAgentTaskByIp" resultMap="FileAgentTask">-->
-<!--        select detail.inlong_group_id,-->
-<!--               detail.inlong_stream_id,-->
-<!--               detail.ip,-->
-<!--               detail.file_path,-->
-<!--               detail.status,-->
-<!--               detail.status mod 100                             as op,-->
-<!--               detail.modify_time,-->
-<!--               detail.id,-->
-<!--               concat(basic.date_offset, basic.date_offset_unit) as timeOffset,-->
-<!--               biz.middleware_type,-->
-<!--               biz.mq_resource_obj,-->
-<!--               ds.data_generate_rule,-->
-<!--               ds.sort_type,-->
-<!--               stream.data_separator-->
-<!--        from source_file_basic basic,-->
-<!--             source_file_detail detail,-->
-<!--             business biz,-->
-<!--             data_schema ds,-->
-<!--             data_stream stream-->
-<!--        where detail.ip = #{ip,jdbcType=VARCHAR}-->
-<!--          and detail.is_deleted = 0-->
-<!--          and (floor(detail.STATUS / 100) = 2)-->
-<!--          and basic.inlong_group_id = detail.inlong_group_id-->
-<!--          and basic.inlong_stream_id = detail.inlong_stream_id-->
-<!--          and biz.inlong_group_id = detail.inlong_group_id-->
-<!--          and biz.schema_name = ds.name-->
-<!--          and stream.inlong_stream_id = detail.inlong_stream_id-->
-<!--          and stream.inlong_group_id = detail.inlong_group_id-->
-<!--    </select>-->
+    <select id="selectAgentTaskDataConfig" parameterType="org.apache.inlong.agent.plugin.fetcher.dtos.TaskRequestDto" resultMap="DataConfig">
+        select
+               detail.inlong_group_id,
+               detail.inlong_stream_id,
+               detail.modify_time,
+               detail.uuid,
+               detail.agent_ip,
+               detail.status mod 100                             as op,
+               detail.id,
+               detail.task_type,
+               detail.task_config,
+        from stream_source detail,
+        where  detail.is_deleted = 0
+            <if test="agentIp != null and agentIp != ''">
+                and detail.agent_ip = #{agentIp, jdbcType=VARCHAR}
+            </if>
+            <if test="uuid != null and uuid != ''">
+                and detail.uuid = #{uuid, jdbcType=VARCHAR}
+            </if>
+            and (floor(detail.STATUS / 100) = 2)
+    </select>
 </mapper>
